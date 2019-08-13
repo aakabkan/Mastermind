@@ -35,8 +35,8 @@ public class MasterRow{
       guess[i].addMouseListener(m);
       guessPanel.add(guess[i]);
     }
-    done = new JButton("Klar");
-    randomize = new JButton("Slumpa");
+    done = new JButton("Done");
+    randomize = new JButton("Randomize");
     initBut(randomize,butDim);
     initBut(done,butDim);
     done.setVisible(false);
@@ -51,7 +51,7 @@ public class MasterRow{
     }
   }
 
-  public boolean checkFinished(){//should check if all lables have been giving a color
+  public boolean checkFinished(){//should check if all lables have been given a color
     for (int i=0;i<NLABELS;i++){
       if (guess[i].getBackground().equals(Color.white)){
         return false;

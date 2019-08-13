@@ -1,5 +1,4 @@
 import java.util.*;
-import java.lang.*;
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -62,13 +61,13 @@ public class MasterMaind extends JFrame implements MouseListener, ActionListener
     lowerPanel.setBackground(LGRAY);
     lowerPanel.setPreferredSize(new Dimension(860,40));
     ButtonGroup option = new ButtonGroup();
-    guessOption = new JRadioButton("Gissa",true);
+    guessOption = new JRadioButton("Guess",true);
     guessOption.setBackground(LGRAY);
     initRadBut(guessOption,option,lowerPanel);
-    hideOption = new JRadioButton("Göm",false);
+    hideOption = new JRadioButton("Hide",false);
     hideOption.setBackground(LGRAY);
     initRadBut(hideOption,option,lowerPanel);
-    newGame = new JButton("Nytt spel");
+    newGame = new JButton("New game");
     newGame.addActionListener(this);
     lowerPanel.add(newGame);
     bigPanel.add(lowerPanel);
@@ -79,10 +78,6 @@ public class MasterMaind extends JFrame implements MouseListener, ActionListener
     rb.addActionListener(this);
     bg.add(rb);
     p.add(rb);
-  }
-
-  public Color[] getHidden(){
-    return hidden;
   }
 
   public static void main(String[] args) {
@@ -97,7 +92,7 @@ public class MasterMaind extends JFrame implements MouseListener, ActionListener
       if (e.getSource().equals(rows[rowN].done)){//if a row is finshed
         if (rows[rowN].checkFinished()){
           rows[rowN].done.setVisible(false);
-          if (!hiding){//if we're guessing, the result should be printed, an new row should show
+          if (!hiding){//if we're guessing, the result should be printed, a new row should be shown
             rows[rowN].checkResult(hidden);
             if (rowN<MAXROWS-1 && rows[rowN].getCorrects()!=rows[rowN].NLABELS){
               rowN++;
@@ -105,39 +100,44 @@ public class MasterMaind extends JFrame implements MouseListener, ActionListener
             }
           }
           else{//if we're hiding, the computer should find the correct row
-            for (int i=0; i<rows[rowN].NLABELS; i++){
-              hidden[i]=rows[rowN].guess[i].getBackground();
-            }
             MasterComputer comp = new MasterComputer(this,rows);
             comp.checkComputer();
           }
         }
       }
-      else if (e.getSource().equals(rows[rowN].randomize)){//should randimize the remaining labels
-        for (int i=0; i<rows[rowN].NLABELS; i++){
-          if (rows[rowN].guess[i].getBackground().equals(Color.white)){
-            rows[rowN].guess[i].setBackground(col[(int)(NCOLORS*Math.random())]);
-          }
-        }
-        rows[rowN].randomize.setVisible(false);
-        rows[rowN].done.setVisible(true);
+      else if (e.getSource().equals(rows[rowN].randomize)){
+        randomizeEmptyLabels();
       }
-      else if (e.getSource().equals(newGame)){//should start a new game and check if it is for hiding or guessing
-        for (int i=0; i<MAXROWS; i++){
-          rows[i].reset();
-        }
-        rows[0].guessPanel.setVisible(true);
-        rowN=0;
-        if (guessOption.isSelected()){
-          for (int i=0; i<rows[rowN].NLABELS; i++){
-            hidden[i]=col[(int)(NCOLORS*Math.random())];
-          }
-          hiding=false;
-        }
-        else if (hideOption.isSelected()){
-          hiding=true;
-        }
+      else if (e.getSource().equals(newGame)){
+        startNewGame();
       }
+  }
+
+  public void randomizeEmptyLabels(){
+    for (int i=0; i<rows[rowN].NLABELS; i++){
+      if (rows[rowN].guess[i].getBackground().equals(Color.white)){
+        rows[rowN].guess[i].setBackground(col[(int)(NCOLORS*Math.random())]);
+      }
+    }
+    rows[rowN].randomize.setVisible(false);
+    rows[rowN].done.setVisible(true);
+  }
+
+  public void startNewGame(){
+    for (int i=0; i<MAXROWS; i++){
+      rows[i].reset();
+    }
+    rows[0].guessPanel.setVisible(true);
+    rowN=0;
+    if (guessOption.isSelected()){
+      for (int i=0; i<rows[rowN].NLABELS; i++){
+        hidden[i]=col[(int)(NCOLORS*Math.random())];
+      }
+      hiding=false;
+    }
+    else if (hideOption.isSelected()){
+      hiding=true;
+    }
   }
 
   public void mouseClicked(MouseEvent e){}

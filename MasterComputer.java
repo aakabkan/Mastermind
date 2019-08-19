@@ -2,15 +2,15 @@ import java.util.*;
 import java.awt.*;
 
 public class MasterComputer{
-  private MasterMaind mm;
+  private MasterControl mc;
   private MasterRow[] rows;
   private Color[] hidden;
   private int rowN=0;
   private boolean[] picked;// to see what positions have been chosen
   private Color[] attempt;//a test row we will need
 
-  public MasterComputer(MasterMaind m, MasterRow[] r){
-    mm = m;
+  public MasterComputer(MasterControl m, MasterRow[] r){
+    mc = m;
     rows = r;
     hidden = new Color[rows[rowN].NLABELS];
     for (int i=0; i<rows[rowN].NLABELS; i++){
@@ -24,11 +24,11 @@ public class MasterComputer{
     rows[rowN].randomize.setVisible(false);
     if (rowN==0){
       for (int i=0;i<rows[rowN].NLABELS;i++){
-        rows[0].guess[i].setBackground(mm.col[(int)(mm.NCOLORS*Math.random())]);
+        rows[0].guess[i].setBackground(mc.col[(int)(mc.NCOLORS*Math.random())]);
       }
       rows[0].checkResult(hidden);
       boolean ok=true;//to see if the attempted row is good enough
-      while (rows[rowN].getCorrects()<rows[rowN].NLABELS && rowN<mm.MAXROWS-1){
+      while (rows[rowN].getCorrects()<rows[rowN].NLABELS && rowN<mc.MAXROWS-1){
         if (ok){
           rowN++;
         }
@@ -101,7 +101,7 @@ public class MasterComputer{
     for (int i=0;i<rows[rowN].NLABELS;i++){
         while(attempt[i]==null){
           boolean chosen=false;
-          Color randCol = mm.col[(int)(mm.NCOLORS*Math.random())];
+          Color randCol = mc.col[(int)(mc.NCOLORS*Math.random())];
           for (int j=0;j<rows[rowN].NLABELS;j++){//checks if the randomized color are among the colors we decided were wrong
             if (rows[rowN-1].guess[j].getBackground().equals(randCol) && !picked[j]){
               chosen = true;
@@ -117,7 +117,7 @@ public class MasterComputer{
 
   public boolean testAgainstEarlierRows(){//should test whether it works in relation to the earlier rows
     for (int i=0; i<rowN; i++){
-        MasterRow tempRow = new MasterRow(mm);
+        MasterRow tempRow = new MasterRow(mc);
         for (int j=0; j<rows[rowN].NLABELS; j++){
           tempRow.guess[j].setBackground(rows[i].guess[j].getBackground());
         }

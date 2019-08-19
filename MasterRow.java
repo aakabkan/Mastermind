@@ -16,9 +16,9 @@ public class MasterRow{
   public static final Color LGRAY = new Color(179,179,179);
   private int nCorrects=0;
   private int nWrongs=0;
-  private MasterMaind m;
+  private MasterControl m;
 
-  public MasterRow(MasterMaind m){//should create a new panel with a row
+  public MasterRow(MasterControl m){//should create a new panel with a row
     this.m = m;
     guessPanel = new JPanel();
     guessPanel.setBackground(LGRAY);
